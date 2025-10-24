@@ -9,8 +9,9 @@ const port = process.env.PORT || 3000;
 // ✅ Middleware
 app.use(cors({
   origin: [
-    "https://roommate-finder-1213.netlify.app", // তোমার frontend URL
-    "http://localhost:5173" // local dev সময়ের জন্য
+    "https://roommate-finder-001.netlify.app", // তোমার frontend URL
+    "http://localhost:5173" ,// local dev সময়ের জন্য
+    "https://roommate-finder-server-site-7ki9-juns28frs.vercel.app"
   ],
   credentials: true,
 }));
