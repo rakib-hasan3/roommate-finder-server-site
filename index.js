@@ -140,25 +140,21 @@ async function run() {
     });
 
     // 🟢 Own Listings (User's Posts)
-   app.get("/ownlistings", async (req, res) => {
-  try {
-    const email = req.query.email; // get email from query parameter
-    console.log("Email received:", email); // optional: debug log
+    app.get("ownlistings", async (req, res) => {
+      try {
+        const email = req.query.email;
+        if (!email) {
+          console.log(email)
+          return res.status(400).send({ message: "Email is required" });
+        }
 
-    if (!email) {
-      return res.status(400).send({ message: "Email is required" });
-    }
-
-    // Make sure the database field matches this key
-    const listings = await roommateCollection.find({ userEmail: email }).toArray();
-
-    res.send(listings);
-  } catch (error) {
-    console.error("Error fetching listings:", error);
-    res.status(500).send({ message: "Failed to fetch listings" });
-  }
-});
-
+        const result = await roommateCollection.find({ userEmail: email }).toArray();
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Failed to fetch listings" });
+      }
+    });
 
     // 🟢 Delete a listing
     app.delete("/ownlistings/:id", async (req, res) => {
