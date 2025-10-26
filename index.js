@@ -11,7 +11,7 @@ app.use(cors({
   origin: [
     "https://roommate-finder-001.netlify.app", // তোমার frontend URL
     "http://localhost:5173" ,// local dev সময়ের জন্য
-    "https://roommate-finder-server-site-7ki9-juns28frs.vercel.app"
+ 
   ],
   credentials: true,
 }));
@@ -140,13 +140,23 @@ async function run() {
     });
 
     // 🟢 Own Listings (User's Posts)
-   app.get('/ownlistings', async (req, res) => {
-  const email = req.query.email;
-  if (!email) {
-    return res.status(400).send({ message: "Email is required" });
+   app.get("/ownlistings", async (req, res) => {
+  try {
+    const email = req.query.email; // get email from query parameter
+    console.log("Email received:", email); // optional: debug log
+
+    if (!email) {
+      return res.status(400).send({ message: "Email is required" });
+    }
+
+    // Make sure the database field matches this key
+    const listings = await roommateCollection.find({ userEmail: email }).toArray();
+
+    res.send(listings);
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    res.status(500).send({ message: "Failed to fetch listings" });
   }
-  const result = await roommateCollection.find({ email }).toArray();
-  res.send(result);
 });
 
 
